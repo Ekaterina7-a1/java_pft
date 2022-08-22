@@ -2,12 +2,11 @@ package ru.stqa.pft.sandbox;
 
 public class Point {
   public static void main(String[] args) {
-
-    Pointsdata P = new Pointsdata(10.5, 13.1, -18, -1.8);
-    System.out.println("Расстояние между точками = " + distance(P));
+    Pointsdata a = new Pointsdata(1.5, -9.5);
+    Pointsdata b = new Pointsdata(5.5, 1.1);
+    System.out.println("Расстояние между точками = " + distance(a, b));
   }
-  public static double distance (Pointsdata P){
-
-    return Math.sqrt((P.p3-P.p1)*(P.p3-P.p1)+(P.p4-P.p2)*(P.p4-P.p2));
+  public static double distance(Pointsdata p1, Pointsdata p2) {
+    return Math.sqrt((p2.x - p1.x)*(p2.x - p1.x)+(p2.y - p1.y)*(p2.y - p1.y));
   }
 }
