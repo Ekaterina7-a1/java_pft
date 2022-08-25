@@ -14,10 +14,10 @@ public class ApplicationManager {
     wd = new ChromeDriver();
     wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
     js = (JavascriptExecutor) wd;
-    sessionHelper.login("admin", "secret");
     groupHepler = new GroupHepler(wd);
     navigationHelper = new NavigationHelper(wd);
     sessionHelper = new SessionHelper(wd);
+    sessionHelper.login("admin", "secret");
   }
   public void stop() {
     wd.quit();
