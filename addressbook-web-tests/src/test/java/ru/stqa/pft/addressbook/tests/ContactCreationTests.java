@@ -1,7 +1,8 @@
-package com.example.GroupCreationTests;
+package ru.stqa.pft.addressbook.tests;
 
 import java.time.Duration;
 
+import com.example.GroupCreationTests.ContactData;
 import org.testng.annotations.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
