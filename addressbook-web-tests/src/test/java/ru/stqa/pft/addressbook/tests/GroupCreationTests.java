@@ -13,5 +13,4 @@ public class GroupCreationTests extends TestBase{
     app.getGroupHepler().submitGroupCreation();
     app.getGroupHepler().returnToGroupPage();
   }
-
 }
