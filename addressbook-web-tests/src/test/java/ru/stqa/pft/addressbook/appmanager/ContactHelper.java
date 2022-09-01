@@ -20,9 +20,6 @@ public class ContactHelper extends HelperBase{
   public void gotoAddNewPage() {
     wd.findElement(By.linkText("add new")).click();
   }
-  public void submitContactCreation() {
-    wd.findElement(By.xpath("//div[@id='content']/form/input[21]")).click();
-  }
 
   public void initContactCreation() {
     wd.findElement(By.name("firstname")).click();
