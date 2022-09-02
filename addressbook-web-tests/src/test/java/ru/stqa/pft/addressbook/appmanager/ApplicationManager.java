@@ -1,8 +1,14 @@
 package ru.stqa.pft.addressbook.appmanager;
 
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.remote.BrowserType;
+
 import java.time.Duration;
+
 
 public class ApplicationManager {
   private ContactHelper contactHelper;
@@ -10,13 +16,25 @@ public class ApplicationManager {
   public NavigationHelper navigationHelper;
   private GroupHepler groupHepler;
   private JavascriptExecutor js;
-  private ChromeDriver wd;
+  WebDriver wd;
+  private String browser;
 
   public ApplicationManager() {
     this.contactHelper = contactHelper;
   }
+
+  public ApplicationManager(String browser) {
+    this.browser = browser;
+  }
+
   public void init() {
-    wd = new ChromeDriver();
+    if (browser.equals(BrowserType.CHROME)) {
+      wd = new ChromeDriver();
+    } else if (browser.equals(BrowserType.FIREFOX)) {
+      wd = new FirefoxDriver();
+    }  else if (browser.equals(BrowserType.EDGE)) {
+      wd = new EdgeDriver();
+    }
     wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
     js = (JavascriptExecutor) wd;
     wd.get("http://localhost/addressbook/edit.php");

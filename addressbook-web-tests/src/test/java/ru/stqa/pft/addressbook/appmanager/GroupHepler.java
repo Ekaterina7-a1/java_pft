@@ -1,11 +1,12 @@
 package ru.stqa.pft.addressbook.appmanager;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import ru.stqa.pft.addressbook.model.GroupData;
 
 public class GroupHepler extends HelperBase {
-  public GroupHepler(ChromeDriver wd) {
+  public GroupHepler(WebDriver wd) {
     super(wd);
   }
 

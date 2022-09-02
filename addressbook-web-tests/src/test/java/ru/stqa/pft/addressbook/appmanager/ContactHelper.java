@@ -1,11 +1,12 @@
 package ru.stqa.pft.addressbook.appmanager;
 
+import org.openqa.selenium.WebDriver;
 import ru.stqa.pft.addressbook.model.ContactData;
 import org.openqa.selenium.By;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 public class ContactHelper extends HelperBase{
-  public ContactHelper(ChromeDriver wd) {
+  public ContactHelper(WebDriver wd) {
     super(wd);
   }
   public void fillContactForm(ContactData contactData) {
