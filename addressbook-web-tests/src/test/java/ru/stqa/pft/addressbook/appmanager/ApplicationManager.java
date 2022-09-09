@@ -35,7 +35,7 @@ public class ApplicationManager {
     }  else if (browser.equals(BrowserType.EDGE)) {
       wd = new EdgeDriver();
     }
-    wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+    wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
     js = (JavascriptExecutor) wd;
     wd.get("http://localhost/addressbook/edit.php");
     groupHepler = new GroupHepler(wd);

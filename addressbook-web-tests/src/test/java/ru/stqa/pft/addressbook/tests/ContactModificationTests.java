@@ -9,11 +9,12 @@ public class ContactModificationTests extends TestBase{
   public void testContactModification(){
     app.getContactHelper().gotoHomePage();
     if (!app.getContactHelper().isThereAContact()) {
+      app.getContactHelper().gotoAddNewPage();
       app.getContactHelper().createContact(new ContactData("Ekaterina", "Leonkina", "leokate", "Moscow city", "9251536358", "leonk-ekaterina@yandex.ru", "test1"));
     }
     app.getContactHelper().initContactModification();
     app.getContactHelper().fillContactForm(new ContactData("Katya", "Leonkina", "leokate", "Moscow city", "9251536358", "leonk-ekaterina@yandex.ru", null));
     app.getContactHelper().submitContactModification();
+    app.getContactHelper().gotoHomePage();
   }
 }
-
