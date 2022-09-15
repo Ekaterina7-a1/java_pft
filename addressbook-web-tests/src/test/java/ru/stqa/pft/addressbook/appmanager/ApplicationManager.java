@@ -35,9 +35,9 @@ public class ApplicationManager {
     }  else if (browser.equals(BrowserType.EDGE)) {
       wd = new EdgeDriver();
     }
-    wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(3));
+    wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
     js = (JavascriptExecutor) wd;
-    wd.get("http://localhost/addressbook/edit.php");
+    wd.get("http://localhost/addressbook");
     groupHepler = new GroupHepler(wd);
     contactHelper = new ContactHelper(wd);
     navigationHelper = new NavigationHelper(wd);
