@@ -2,8 +2,10 @@ package ru.stqa.pft.addressbook.tests;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.GroupData;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class GroupModificationTests extends TestBase{
@@ -17,10 +19,17 @@ public class GroupModificationTests extends TestBase{
     List<GroupData> before = app.getGroupHepler().getGroupList();
     app.getGroupHepler().selectGroup(before.size() - 1);
     app.getGroupHepler().initGroupModification();
-    app.getGroupHepler().fillGroupForm(new GroupData("test1", "test2", "test3"));
+    GroupData group = new GroupData(before.get(before.size() - 1).getId(), "test1", "test2", "test3");
+    app.getGroupHepler().fillGroupForm(group);
     app.getGroupHepler().submitGroupModification();
     app.getGroupHepler().returnToGroupPage();
     List<GroupData> after = app.getGroupHepler().getGroupList();
     Assert.assertEquals(after.size(), before.size());
+    before.remove(before.size() - 1);
+    before.add(group);
+    Comparator<? super GroupData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
+    before.sort(byId);
+    after.sort(byId);
+    Assert.assertEquals(before, after);
   }
 }
