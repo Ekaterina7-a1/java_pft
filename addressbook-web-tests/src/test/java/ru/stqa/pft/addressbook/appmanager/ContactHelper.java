@@ -3,6 +3,11 @@ package ru.stqa.pft.addressbook.appmanager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import ru.stqa.pft.addressbook.model.ContactData;
+import org.openqa.selenium.WebElement;
+import ru.stqa.pft.addressbook.model.GroupData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContactHelper extends HelperBase {
   public ContactHelper(WebDriver wd) {
@@ -17,7 +22,6 @@ public class ContactHelper extends HelperBase {
     type(By.name("mobile"), contactData.getNumberPhone());
     type(By.name("email"), contactData.getEmail());
   }
-
   public void gotoAddNewPage() {
     click(By.linkText("add new"));
   }
@@ -38,10 +42,9 @@ public class ContactHelper extends HelperBase {
     click(By.linkText("home"));
   }
 
-  public void selectContact() {
-    click(By.name("selected[]"));
+  public void selectContact(int index) {
+    wd.findElements(By.name("selected[]")).get(index).click();
   }
-
   public void deleteContact() {
     click(By.xpath("//input[@value='Delete']"));
     wd.switchTo().alert().accept();
@@ -56,7 +59,7 @@ public class ContactHelper extends HelperBase {
   }
 
   public boolean isThereAContact() {
-    return isElementPresent(By.name("selected[]"));
+    return isElementPresent(By.xpath("//div[@id='content']/form/select[5]/option[2]"));
     }
 
   public void gotoContactPage() {
@@ -70,5 +73,16 @@ public class ContactHelper extends HelperBase {
 
   public void submitContactModification() {
     click(By.xpath("//div[@id='content']/form/input[22]"));
+  }
+
+  public List<ContactData> getContactList() {
+    List<ContactData> contacts = new ArrayList<ContactData>();
+    List<WebElement> elements = wd.findElements(By.xpath("//*[@id='maintable']/tbody/tr[@name = 'entry']"));
+    for(WebElement element : elements){
+      int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
+      ContactData contact = new ContactData(id, "Ekaterina", "Leonkina", "leokate", "Moscow city", "9251536358", "leonk-ekaterina@yandex.ru", "test1");
+      contacts.add(contact);
+    }
+    return contacts;
   }
 }
