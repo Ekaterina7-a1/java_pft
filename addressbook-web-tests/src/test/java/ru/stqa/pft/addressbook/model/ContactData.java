@@ -11,8 +11,8 @@ public class ContactData {
   private final String numberPhone;
   private final String email;
   private String group;
-  public ContactData(String firstname, String lastname, String nickname, String address, String numberPhone, String email, String group) {
-    this.id = Integer.MAX_VALUE;
+  public ContactData(int id, String firstname, String lastname, String nickname, String address, String numberPhone, String email, String group) {
+    this.id = id;
     this.firstname = firstname;
     this.lastname = lastname;
     this.nickname = nickname;
@@ -21,8 +21,9 @@ public class ContactData {
     this.email = email;
     this.group = group;
   }
-  public ContactData(int id, String firstname, String lastname, String nickname, String address, String numberPhone, String email, String group) {
-    this.id = id;
+
+  public ContactData(String firstname, String lastname, String nickname, String address, String numberPhone, String email, String group) {
+    this.id = Integer.MAX_VALUE;
     this.firstname = firstname;
     this.lastname = lastname;
     this.nickname = nickname;
@@ -56,16 +57,28 @@ public class ContactData {
     return email;
   }
   public int getId() { return id; }
+
+  public void setId(int id) {
+    this.id = id;
+  }
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    ContactData contactData = (ContactData) o;
-    return Objects.equals(firstname, contactData.firstname);
+    ContactData that = (ContactData) o;
+    return Objects.equals(firstname, that.firstname) && Objects.equals(lastname, that.lastname);
+  }
+  @Override
+  public int hashCode() {
+    return Objects.hash(firstname, lastname);
   }
 
   @Override
-  public int hashCode() {
-    return Objects.hash(firstname);
+  public String toString() {
+    return "ContactData{" +
+            "id=" + id +
+            ", name='" + firstname + '\'' +
+            ", last_name='" + lastname + '\'' +
+            '}';
   }
 }

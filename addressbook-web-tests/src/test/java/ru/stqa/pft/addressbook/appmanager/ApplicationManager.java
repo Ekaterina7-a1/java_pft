@@ -16,7 +16,7 @@ public class ApplicationManager {
   public NavigationHelper navigationHelper;
   private GroupHepler groupHepler;
   private JavascriptExecutor js;
-  WebDriver wd;
+  public WebDriver wd;
   private String browser;
 
   public ApplicationManager() {
