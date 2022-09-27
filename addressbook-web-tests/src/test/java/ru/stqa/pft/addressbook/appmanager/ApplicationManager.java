@@ -32,7 +32,7 @@ public class ApplicationManager {
       wd = new ChromeDriver();
     } else if (browser.equals(BrowserType.FIREFOX)) {
       wd = new FirefoxDriver();
-    }  else if (browser.equals(BrowserType.EDGE)) {
+    } else if (browser.equals(BrowserType.EDGE)) {
       wd = new EdgeDriver();
     }
     wd.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
@@ -44,16 +44,23 @@ public class ApplicationManager {
     sessionHelper = new SessionHelper(wd);
     sessionHelper.login("admin", "secret");
   }
-  public GroupHepler getGroupHepler() {
+
+  public GroupHepler group() {
     return groupHepler;
   }
-  public NavigationHelper getNavigationHelper() {
+
+  public ContactHelper contact() {
+    return contactHelper;
+  }
+
+  public NavigationHelper goTo() {
     return navigationHelper;
   }
 
   public ContactHelper getContactHelper() {
     return contactHelper;
   }
+
   public void stop() {
     wd.quit();
   }

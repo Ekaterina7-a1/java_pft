@@ -30,14 +30,6 @@ public class GroupCreationTests {
   }
 
   @Test
-  public void testGroupCreation() throws Exception {
-    gotoGroupPage();
-    initGroupCreation();
-    fillGroupForm(new GroupData("test1", "test2", "test3"));
-    submitGroupCreation();
-    returnToGroupPage();
-  }
-
   private void returnToGroupPage() {
     wd.findElement(By.linkText("group page")).click();
   }

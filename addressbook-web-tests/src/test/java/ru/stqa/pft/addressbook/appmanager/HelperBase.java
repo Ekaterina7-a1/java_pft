@@ -5,13 +5,13 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 
 public class HelperBase {
-  protected WebDriver wd;
+  protected static WebDriver wd;
 
   public HelperBase(WebDriver wd) {
     this.wd = wd;
   }
 
-  public By click(By locator) {
+  public static By click(By locator) {
     wd.findElement(locator).click();
     return locator;
   }
