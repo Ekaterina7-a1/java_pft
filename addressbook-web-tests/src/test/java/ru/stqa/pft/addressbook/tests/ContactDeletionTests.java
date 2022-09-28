@@ -16,11 +16,14 @@ public class ContactDeletionTests extends TestBase {
   @BeforeMethod
   public void ensurePreconditions() {
     if (app.contact().all().size() == 0) {
-      app.contact().createContact(new ContactData().withFirstname("Katya").withLastname("Leonkina").withNickname("leokate").withAddress("Moscow city").withNumberPhone("9251536358").withEmail("leonk-ekaterina@yandex.ru").withGroup("test1"));
+      ContactData contact = new ContactData().
+              withFirstname("Ekaterina").withLastname("Leonkina").withNickname("leokate")
+              .withAddress("city").withHomePhone("123456789").withMobile("+79997777777").withWorkPhone("9998888888")
+              .withEmail("test@yandex.ru").withEmail2("ksat@yandex.ru").withEmail3("kaytetest@yandex.ru").withGroup("test1");
+      app.contact().createContact(contact);
       ;
     }
   }
-
   @Test
   public void testContactDeletion() throws Exception {
     Contacts before = app.contact().all();

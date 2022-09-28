@@ -5,6 +5,7 @@ import org.openqa.selenium.WebDriver;
 import ru.stqa.pft.addressbook.model.ContactData;
 import org.openqa.selenium.WebElement;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.Groups;
 
 import java.util.List;
 
@@ -18,8 +19,12 @@ public class ContactHelper extends HelperBase {
     type(By.name("lastname"), contactData.getLastname());
     type(By.name("nickname"), contactData.getNickname());
     type(By.name("address"), contactData.getAddress());
-    type(By.name("mobile"), contactData.getNumberPhone());
+    type(By.name("address"), contactData.getAddress());
+    type(By.name("home"), contactData.getHomePhone());
+    type(By.name("mobile"), contactData.getMobilePhone());
     type(By.name("email"), contactData.getEmail());
+    type(By.name("email2"), contactData.getEmail2());
+    type(By.name("email3"), contactData.getEmail3());
   }
 
   public void initContactCreation() {
@@ -54,6 +59,7 @@ public class ContactHelper extends HelperBase {
     initContactCreation();
     fillContactForm(contactData, true);
     submitContactCreation();
+    contactCache = null;
     gotoHomePage();
   }
 
@@ -79,6 +85,7 @@ public class ContactHelper extends HelperBase {
     initContactModification(contactData.getId());
     fillContactForm(contactData, false);
     submitContactModification();
+    contactCache = null;
     gotoHomePage();
   }
 
@@ -86,18 +93,43 @@ public class ContactHelper extends HelperBase {
     selectContactById(contact.getId());
     deleteContact();
     wd.switchTo().alert().accept();
+    contactCache = null;
     gotoHomePage();
   }
-
+  private Contacts contactCache = null;
   public Contacts all() {
-    Contacts contacts = new Contacts();
-    List<WebElement> elements = wd.findElements(By.cssSelector("tr[name='entry']"));
-    for (WebElement element : elements) {
-      String lastname = element.findElement(By.cssSelector("tr[name='entry'] > td:nth-child(2)")).getText();
-      String firstname = element.findElement(By.cssSelector("tr[name='entry'] > td:nth-child(3)")).getText();
-      int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("id"));
-      contacts.add(new ContactData().withId(id).withFirstname(firstname).withLastname(lastname));
+    if (contactCache != null) {
+      return new Contacts(contactCache);
     }
-    return contacts;
+    contactCache = new Contacts();
+    List<WebElement> elements = wd.findElements(By.xpath("//*[@id='maintable']/tbody/tr[@name = 'entry']"));
+    for (WebElement element : elements) {
+      List<WebElement> cells = element.findElements(By.tagName("td"));
+      int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
+      String lastname = cells.get(1).getText();
+      String firstname = cells.get(2).getText();
+      String address = cells.get(3).getText();
+      String allEmails = cells.get(4).getText();
+      String allPhones = cells.get(5).getText();
+      contactCache.add(new ContactData().withId(id).withFirstname(firstname).withLastname(lastname).withAddress(address).withAllPhones(allPhones).withAllEmails(allEmails));
+    }
+    return contactCache;
+  }
+  public ContactData infoFromEditForm(ContactData contact) {
+    initContactModification(contact.getId());
+    String firstname = wd.findElement(By.name("firstname")).getAttribute("value");
+    String lastname = wd.findElement(By.name("lastname")).getAttribute("value");
+    String homePhone = wd.findElement(By.name("home")).getAttribute("value");
+    String mobilePhone = wd.findElement(By.name("mobile")).getAttribute("value");
+    String workPhone = wd.findElement(By.name("work")).getAttribute("value");
+    String address = wd.findElement(By.name("address")).getAttribute("value");
+    String email1 = wd.findElement(By.name("email")).getAttribute("value");
+    String email2 = wd.findElement(By.name("email2")).getAttribute("value");
+    String email3 = wd.findElement(By.name("email3")).getAttribute("value");
+
+    wd.navigate().back();
+    return new ContactData().withId(contact.getId()).withFirstname(firstname).withLastname(lastname).withAddress(address)
+            .withHomePhone(homePhone).withMobile(mobilePhone).withWorkPhone(workPhone).withEmail(email1)
+            .withEmail2(email2).withEmail3(email3);
   }
 }
