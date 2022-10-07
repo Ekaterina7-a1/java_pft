@@ -1,23 +1,43 @@
 package ru.stqa.pft.addressbook.model;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.Objects;
+import java.io.File;
 
 public class ContactData {
   private int id = Integer.MAX_VALUE;
+  @Expose
   private String firstname;
+  @Expose
   private String lastname;
+  @Expose
   private String nickname;
+  @Expose
   private String address;
+  @Expose
   private String homePhone;
+  @Expose
   private String mobilePhone;
+  @Expose
   private String workPhone;
+  @Expose
   private String phone2;
+  @Expose
   private String allPhones;
+  @Expose
   private String email;
+  @Expose
   private String email2;
+  @Expose
   private String email3;
+  @Expose
   private String group;
+  @Expose
   private String allEmails;
+  @Expose
+
+  private File photo;
 
   public String getAllEmails() {
     return allEmails;
@@ -79,6 +99,8 @@ public class ContactData {
   public int getId() {
     return id;
   }
+
+  public File getPhoto() { return photo; }
 
   public ContactData withId(int id) {
     this.id = id;
@@ -144,12 +166,19 @@ public class ContactData {
     this.mobilePhone = mobile;
     return this;
   }
+
   public ContactData withPhone2(String phone2) {
     this.phone2 = phone2;
     return this;
   }
+
   public ContactData withWorkPhone(String workPhone) {
     this.workPhone = workPhone;
+    return this;
+  }
+
+  public ContactData withPhoto(File photo) {
+    this.photo = photo;
     return this;
   }
 
