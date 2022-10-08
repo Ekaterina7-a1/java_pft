@@ -1,0 +1,44 @@
+[
+  {
+    "firstname": "testFirstname 0",
+    "lastname": "testLastname 0",
+    "nickname": "testNickname 0",
+    "address": "Some City, some Street, house 23, flat 10",
+    "homePhone": "7878780",
+    "mobilePhone": "+(7999)9999990",
+    "workPhone": "9-999-99990",
+    "phone2": "+7(777)777-77-70",
+    "email": "test0@yandex.ru ",
+    "email2": "123-test0-123@mail.com",
+    "email3": "cat.cat0@email.ru",
+    "group": "test1"
+  },
+  {
+    "firstname": "testFirstname 1",
+    "lastname": "testLastname 1",
+    "nickname": "testNickname 1",
+    "address": "Some City, some Street, house 23, flat 11",
+    "homePhone": "7878781",
+    "mobilePhone": "+(7999)9999991",
+    "workPhone": "9-999-99991",
+    "phone2": "+7(777)777-77-71",
+    "email": "test1@yandex.ru ",
+    "email2": "123-test1-123@mail.com",
+    "email3": "cat.cat1@email.ru",
+    "group": "test1"
+  },
+  {
+    "firstname": "testFirstname 2",
+    "lastname": "testLastname 2",
+    "nickname": "testNickname 2",
+    "address": "Some City, some Street, house 23, flat 12",
+    "homePhone": "7878782",
+    "mobilePhone": "+(7999)9999992",
+    "workPhone": "9-999-99992",
+    "phone2": "+7(777)777-77-72",
+    "email": "test2@yandex.ru ",
+    "email2": "123-test2-123@mail.com",
+    "email3": "cat.cat2@email.ru",
+    "group": "test1"
+  }
+]
