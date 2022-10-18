@@ -10,14 +10,20 @@ import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
 
+import java.io.File;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+
 public class ContactModificationTests extends TestBase {
   @BeforeMethod
   public void ensurePreconditions() {
-    if (app.contact().all().size() == 0) {
+    if (app.db().contacts().size() == 0) {
+      File photo = new File("src/test/resources/bob.jpg");
       ContactData contact = new ContactData().
               withFirstname("Ekaterina").withLastname("Leonkina").withNickname("leokate")
               .withAddress("city").withHomePhone("123456789").withMobile("+79997777777").withWorkPhone("9998888888").withPhone2("+7(555)111-55-25").withEmail("test@yandex.ru").
-              withEmail2("ksat@yandex.ru").withEmail3("kaytetest@yandex.ru").withGroup("test1");
+              withEmail2("ksat@yandex.ru").withEmail3("kaytetest@yandex.ru").withGroup("test1").withPhoto(photo);
       app.contact().createContact(contact);
       ;
     }
@@ -25,17 +31,14 @@ public class ContactModificationTests extends TestBase {
 
   @Test
   public void testContactModification() {
-    Contacts before = app.contact().all();
+    File photo = new File("src/test/resources/bob.jpg");
+    Contacts before = app.db().contacts();
     ContactData modifiedContact = before.iterator().next();
     ContactData contactData2 = new ContactData().withId(modifiedContact.getId()).withFirstname("Katya").withLastname("Leonkina").withNickname("leokate")
             .withAddress("city").withHomePhone("123456789").withMobile("+6868524").withWorkPhone("5555")
-            .withEmail("testik@yandex.ru").withEmail2("ksat@yandex.ru").withEmail3("kaytetest@yandex.ru").withGroup("test1");
-    app.contact().modify(before, contactData2);
-    Contacts after = app.contact().all();
-    Assert.assertEquals(after.size(), before.size());
-    before.remove(modifiedContact);
-    before.add(contactData2);
-    Assert.assertEquals(before, after);
-    MatcherAssert.assertThat(after, CoreMatchers.equalTo(before.without(modifiedContact).withAdded(contactData2)));
+            .withEmail("testik@yandex.ru").withEmail2("ksat@yandex.ru").withEmail3("kaytetest@yandex.ru").withGroup("test1").withPhoto(photo);
+    app.contact().modify(contactData2);
+    Contacts after = app.db().contacts();
+    assertThat(after, equalTo(before.without(modifiedContact).withAdded(contactData2)));
   }
 }

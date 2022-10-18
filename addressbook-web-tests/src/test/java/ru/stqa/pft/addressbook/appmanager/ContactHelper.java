@@ -7,7 +7,6 @@ import org.openqa.selenium.WebElement;
 import ru.stqa.pft.addressbook.model.Contacts;
 
 import java.util.List;
-import java.util.Set;
 
 public class ContactHelper extends HelperBase {
   public ContactHelper(WebDriver wd) {
@@ -83,7 +82,7 @@ public class ContactHelper extends HelperBase {
     click(By.linkText("add new"));
   }
 
-  public void modify(Set<ContactData> before, ContactData contactData) {
+  public void modify(ContactData contactData) {
     selectContactById(contactData.getId());
     initContactModification(contactData.getId());
     fillContactForm(contactData, false);

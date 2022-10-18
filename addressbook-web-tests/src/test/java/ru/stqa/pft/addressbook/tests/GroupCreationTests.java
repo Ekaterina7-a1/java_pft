@@ -7,7 +7,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.GroupData;
 import ru.stqa.pft.addressbook.model.Groups;
-
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -59,21 +60,34 @@ public class GroupCreationTests extends TestBase {
   @Test(dataProvider = "validGroupsFromJson")
   public void testGroupCreation(GroupData group) throws Exception {
     app.goTo().groupPage();
-    Groups before = app.group().all();
+    Groups before = app.db().groups();
+    for(GroupData g: before){
+      System.out.println("group before is " + g);
+    }
     app.group().create(group);
     assertThat(app.group().getGroupCount(), equalTo(before.size() + 1));
-    Groups after = app.group().all();
-    assertThat(after, equalTo(before.withAdded(group.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
+    Groups after = app.db().groups();
+    for(GroupData g: after){
+      System.out.println("group after is " + g);
+    }
+    assertThat(after, equalTo(
+            before.withAdded(group.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
   }
 
   @Test(enabled = false)
   public void testBadGroupCreation() throws Exception {
     app.goTo().groupPage();
-    Groups before = app.group().all();
+    Groups before = app.db().groups();
+    for(GroupData g: before){
+      System.out.println("group before is " + g);
+    }
     GroupData group = new GroupData().withName("atest2'");
     app.group().create(group);
     assertThat(app.group().getGroupCount(), equalTo(before.size()));
-    Groups after = app.group().all();
+    Groups after = app.db().groups();
+    for(GroupData g: after){
+      System.out.println("group after is " + g);
+    }
     assertThat(after, equalTo(before));
   }
 }

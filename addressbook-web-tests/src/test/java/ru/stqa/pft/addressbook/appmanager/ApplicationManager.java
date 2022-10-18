@@ -12,6 +12,7 @@ import java.time.Duration;
 import java.io.File;
 import java.io.FileReader;
 import java.util.Properties;
+
 public class ApplicationManager {
   private final Properties properties;
   private ContactHelper contactHelper;
@@ -21,6 +22,7 @@ public class ApplicationManager {
   private JavascriptExecutor js;
   WebDriver wd;
   private String browser;
+  private DbHelper dbHelper;
 
 
   public ApplicationManager(String browser) {
@@ -28,9 +30,10 @@ public class ApplicationManager {
     properties = new Properties();
   }
 
-    public void init() throws IOException {
-      String target = System.getProperty("target", "local");
-      properties.load((new FileReader(new File(String.format("src/test/resources/%s.properties", target)))));
+  public void init() throws IOException {
+    String target = System.getProperty("target", "local");
+    properties.load((new FileReader(new File(String.format("src/test/resources/%s.properties", target)))));
+    dbHelper = new DbHelper();
     if (browser.equals(BrowserType.CHROME)) {
       wd = new ChromeDriver();
     } else if (browser.equals(BrowserType.FIREFOX)) {
@@ -62,6 +65,10 @@ public class ApplicationManager {
 
   public ContactHelper getContactHelper() {
     return contactHelper;
+  }
+
+  public DbHelper db() {
+    return dbHelper;
   }
 
   public void stop() {
