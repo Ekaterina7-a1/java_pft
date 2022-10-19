@@ -2,13 +2,15 @@ package ru.stqa.pft.addressbook.model;
 
 import com.google.gson.annotations.Expose;
 
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
 import java.io.File;
+import java.util.Set;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
 @Entity
 @Table(name = "addressbook")
 @XStreamAlias("contact")
@@ -70,11 +72,10 @@ public class ContactData {
   @Column(name="photo")
   @Type(type ="text")
   private String photo;
+
   public String getAllEmails() {
     return allEmails;
   }
-
-
   public String getEmail2() {
     return email2;
   }
@@ -212,6 +213,17 @@ public class ContactData {
     this.photo = photo.getPath();
     return this;
   }
+  public Groups getGroups() {
+    return new Groups(groups);
+  }
+  public ContactData inGroup(GroupData group) {
+    groups.add(group);
+    return this;
+  }
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "address_in_groups",
+          joinColumns = @JoinColumn(name = "id"),inverseJoinColumns = @JoinColumn(name = "group_id"))
+  private Set<GroupData> groups = new HashSet<GroupData>();
 
   @Override
   public boolean equals(Object o) {

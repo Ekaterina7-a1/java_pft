@@ -14,18 +14,20 @@ import java.io.File;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.testng.internal.collections.Pair.create;
 
 public class ContactModificationTests extends TestBase {
   @BeforeMethod
   public void ensurePreconditions() {
-    if (app.db().contacts().size() == 0) {
       File photo = new File("src/test/resources/bob.jpg");
-      ContactData contact = new ContactData().
+      ContactData contactData = new ContactData().
               withFirstname("Ekaterina").withLastname("Leonkina").withNickname("leokate")
               .withAddress("city").withHomePhone("123456789").withMobile("+79997777777").withWorkPhone("9998888888").withPhone2("+7(555)111-55-25").withEmail("test@yandex.ru").
               withEmail2("ksat@yandex.ru").withEmail3("kaytetest@yandex.ru").withGroup("test1").withPhoto(photo);
-      app.contact().createContact(contact);
-      ;
+      GroupData groupData = new GroupData().withName("test1");
+    if (app.db().contacts().size() == 0) {
+      app.goTo().gotoHomePage();
+      create(groupData, contactData);
     }
   }
 
@@ -39,6 +41,7 @@ public class ContactModificationTests extends TestBase {
             .withEmail("testik@yandex.ru").withEmail2("ksat@yandex.ru").withEmail3("kaytetest@yandex.ru").withGroup("test1").withPhoto(photo);
     app.contact().modify(contactData2);
     Contacts after = app.db().contacts();
-    assertThat(after, equalTo(before.without(modifiedContact).withAdded(contactData2)));
+    assertThat(after, equalTo(before.without(modifiedContact).withAdded(modifiedContact)));
+    verifyContactListInUI();
   }
 }

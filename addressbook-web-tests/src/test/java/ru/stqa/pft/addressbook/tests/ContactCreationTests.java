@@ -6,6 +6,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.GroupData;
+import ru.stqa.pft.addressbook.model.Groups;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,6 +19,8 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.testng.internal.collections.Pair.create;
+
 public class ContactCreationTests extends TestBase{
   @DataProvider
   public Iterator<Object[]> validContactsFromJson() throws IOException {
@@ -35,12 +39,21 @@ public class ContactCreationTests extends TestBase{
 
   @Test(dataProvider = "validContactsFromJson")
   public void testContactCreation(ContactData contactData) throws Exception {
+    GroupData group = new GroupData().withName("test1").withHeader("test2").withFooter("test3");
+    Groups groups = app.db().groups();
     File photo = new File ("src/test/resources/bob.jpg");
-    contactData.withPhoto(photo);
+    if(groups.size() == 0) {
+      app.goTo().groupPage();
+      app.group().create(group);
+      app.goTo().groupPage();
+    }
+    contactData.withPhoto(photo).inGroup(groups.iterator().next());
+    GroupData groupData = new GroupData().withName(contactData.getGroups().iterator().next().getName());
     Contacts before = app.db().contacts();
-    app.contact().createContact(contactData);
+    create(groupData, contactData);
     Contacts after = app.db().contacts();
     assertThat(after.size(), equalTo(before.size() + 1));
     assertThat(after,equalTo(before.withAdded(contactData.withId(after.stream().mapToInt((c) -> c.getId()).max().getAsInt()))));
+    verifyContactListInUI();
   }
 }

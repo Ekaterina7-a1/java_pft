@@ -5,11 +5,11 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+
 @XStreamAlias("group")
 @Entity
 @Table(name = "group_list")
@@ -18,17 +18,6 @@ public class GroupData {
   @Id
   @Column(name = "group_id")
   private int id = Integer.MAX_VALUE;
-  @Expose
-  @Column(name = "group_name")
-  private String name;
-  @Expose
-  @Column(name = "group_header")
-  @Type(type = "text")
-  private String header;
-  @Expose
-  @Column(name = "group_footer")
-  @Type(type = "text")
-  private String footer;
 
   @Override
   public boolean equals(Object o) {
@@ -43,30 +32,25 @@ public class GroupData {
     return Objects.hash(id, name, header, footer);
   }
 
-  public int getId() {
-    return id;
-  }
+  @Expose
+  @Column(name = "group_name")
+  private String name;
 
-  public String getName() {
-    return name;
-  }
+  @Expose
+  @Column(name = "group_header")
+  @Type(type = "text")
+  private String header;
 
-  public String getHeader() {
-    return header;
-  }
+  @Expose
+  @Column(name = "group_footer")
+  @Type(type = "text")
+  private String footer;
 
-  @Override
-  public String toString() {
-    return "GroupData{" +
-            "id=" + id +
-            ", name='" + name + '\'' +
-            ", header='" + header + '\'' +
-            ", footer='" + footer + '\'' +
-            '}';
-  }
+  @ManyToMany(mappedBy = "groups")
+  private Set<ContactData> contacts = new HashSet<ContactData>();
 
-  public String getFooter() {
-    return footer;
+  public Contacts getContacts() {
+    return new Contacts(contacts);
   }
 
   public GroupData withId(int id) {
@@ -87,6 +71,32 @@ public class GroupData {
   public GroupData withFooter(String footer) {
     this.footer = footer;
     return this;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public String getHeader() {
+    return header;
+  }
+
+  public String getFooter() {
+    return footer;
+  }
+
+  @Override
+  public String toString() {
+    return "GroupData{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", header='" + header + '\'' +
+            ", footer='" + footer + '\'' +
+            '}';
+  }
+
+  public int getId() {
+    return id;
   }
 
 }

@@ -41,6 +41,9 @@ public class GroupHepler extends HelperBase {
     groupCache = null;
     returnToGroupPage();
   }
+  public int count() {
+    return wd.findElements(By.name("selected[]")).size();
+  }
 
   public static void selectGroupById(int id) {
     wd.findElement(By.cssSelector("input[value = '" + id + "']")).click();
@@ -61,7 +64,6 @@ public class GroupHepler extends HelperBase {
     groupCache = null;
     returnToGroupPage();
   }
-
   public void modify(GroupData group) {
     selectGroupById(group.getId());
     initGroupModification();
@@ -93,4 +95,5 @@ public class GroupHepler extends HelperBase {
     }
     return new Groups(groupCache);
   }
+
 }
