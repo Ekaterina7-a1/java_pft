@@ -6,10 +6,16 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
+import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
 import ru.stqa.pft.addressbook.model.Groups;
 
 import java.io.File;
+
+import java.util.stream.Collectors;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ContactDeleteFromGroupTests extends TestBase {
   @BeforeMethod
@@ -35,16 +41,22 @@ public class ContactDeleteFromGroupTests extends TestBase {
 
   @Test
   public void deleteGroupFromContact() {
-    Groups groups = app.db().groups();
-    ContactData contactBeforeDeleteToGroup = app.db().contacts().iterator().next();
-    Groups beforeGroups = contactBeforeDeleteToGroup.getGroups();
-    System.out.println("beforeGroups " + beforeGroups);
-    GroupData groupForRemove = beforeGroups.stream().iterator().next();
-    app.contact().deleteFromGroup(contactBeforeDeleteToGroup, groupForRemove);
-    Groups afterGroups = app.db().contact(contactBeforeDeleteToGroup.getId()).getGroups();
-    MatcherAssert.assertThat(afterGroups, CoreMatchers.equalTo(
-            beforeGroups.without(groupForRemove)));
-
-
+    Contacts beforeContact = app.db().contacts();
+    ContactData contactSelect = beforeContact.iterator().next();
+    Groups beforeGroup = app.db().groups();
+    GroupData groupSelect = beforeGroup.iterator().next();
+    app.goTo().gotoHomePage();
+    if (contactSelect.getGroups().isEmpty() || !contactSelect.getGroups().contains(groupSelect)) {
+      app.contact().selectAllGroup("[all]");
+      app.contact().addContactToGroup(contactSelect, groupSelect);
+      assertThat(contactSelect.getGroups().withAdded(groupSelect), equalTo(app.db().contacts().stream().
+              filter((c) -> c.getId() == contactSelect.getId()).collect(Collectors.toList()).get(0).getGroups()));
+      app.goTo().gotoHomePage();
+    }
+    app.contact().deleteContactFromGroup(contactSelect, groupSelect);
+    app.goTo().gotoHomePage();
+    app.contact().selectAllGroup("[all]");
+    assertThat(contactSelect.getGroups().without(groupSelect), equalTo(app.db().contacts().stream().
+            filter((c) -> c.getId() == contactSelect.getId()).collect(Collectors.toList()).get(0).getGroups()));
   }
 }

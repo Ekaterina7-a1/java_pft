@@ -122,7 +122,17 @@ public class ContactHelper extends HelperBase {
     contactCache = null;
     gotoHomePage();
   }
-
+  public void deleteContactFromGroup(ContactData contact, GroupData group) {
+    selectAllGroup(group.getName());
+    selectContactById(contact.getId());
+    deleteFromGroup(group.getName());
+  }
+  private void deleteFromGroup(String name) {
+    click(By.name("remove"));
+  }
+  public void selectAllGroup(String name) {
+    new Select(wd.findElement(By.name("group"))).selectByVisibleText(name);
+  }
   public void gotoContactPage() {
     if (isElementPresent(By.tagName("h1"))
             && wd.findElement(By.tagName("h1")).getText().equals("Edit / add address book entry")
@@ -187,5 +197,11 @@ public class ContactHelper extends HelperBase {
     return new ContactData().withId(contact.getId()).withFirstname(firstname).withLastname(lastname).withAddress(address)
             .withHomePhone(homePhone).withMobile(mobilePhone).withWorkPhone(workPhone).withPhone2(faxPhone).withEmail(email1)
             .withEmail2(email2).withEmail3(email3);
+  }
+
+  public void addContactToGroup(ContactData contact, GroupData group) {
+    selectContactById(contact.getId());
+    new Select(wd.findElement(By.name("to_group"))).selectByVisibleText(group.getName());
+    click(By.name("add"));
   }
 }

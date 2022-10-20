@@ -1,23 +1,16 @@
 package ru.stqa.pft.addressbook.tests;
 
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
-import org.hibernate.Session;
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import org.testng.collections.CollectionUtils;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
 import ru.stqa.pft.addressbook.model.Groups;
 
 import java.io.File;
-import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ContactAddToGroupTests extends TestBase {
@@ -45,19 +38,20 @@ public class ContactAddToGroupTests extends TestBase {
 
   @Test
   public void addContactToGroupTest() {
-    Groups groups = app.db().groups();
-    ContactData contactBeforeAddingToGroup = app.db().contacts().iterator().next();
-    Groups beforeGroups = contactBeforeAddingToGroup.getGroups();
-    System.out.println("beforeGroups " + beforeGroups);
-    groups.removeAll(beforeGroups);
-    GroupData groupForAdding = groups.stream().filter(g -> !contactBeforeAddingToGroup.getGroups().contains(g)).findFirst().get();
-    System.out.println("groupForAdding is " + groupForAdding);
-    app.contact().addToGroup(contactBeforeAddingToGroup, groupForAdding);
-    Groups afterGroups = app.db().contact(contactBeforeAddingToGroup.getId()).getGroups();
-    System.out.println("afterGroups are " + afterGroups);
-    assertThat(afterGroups, equalTo(
-            beforeGroups.withAdded(groupForAdding)));
-
+    Contacts beforeContact = app.db().contacts();
+    ContactData contactSelect = beforeContact.iterator().next();
+    Groups beforeGroup = app.db().groups();
+    GroupData groupSelect = beforeGroup.iterator().next();
     app.goTo().gotoHomePage();
+    if (!contactSelect.getGroups().isEmpty() && contactSelect.getGroups().contains(groupSelect)) {
+      app.contact().deleteContactFromGroup(contactSelect, groupSelect);
+      assertThat(contactSelect.getGroups().without(groupSelect), equalTo(app.db().contacts().stream().
+              filter((c) -> c.getId() == contactSelect.getId()).collect(Collectors.toList()).get(0).getGroups()));
+      app.goTo().gotoHomePage();
+    }
+    app.contact().selectAllGroup("[all]");
+    app.contact().addToGroup(contactSelect, groupSelect);
+    assertThat(contactSelect.getGroups().withAdded(groupSelect), equalTo(app.db().contacts().stream().
+            filter((c) -> c.getId() == contactSelect.getId()).collect(Collectors.toList()).get(0).getGroups()));
   }
 }
